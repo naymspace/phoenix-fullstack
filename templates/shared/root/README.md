@@ -10,8 +10,7 @@ You can use Docker Compose to start the project.
 
 ### Configuration/Setup
 
-Copy the `config/example.dev.secret.exs` to `config/dev.secret.exs` and the `config/example.test.secret.exs` to 
-`config/dev.test.exs`. They contain the necessary environment variables.
+None
 
 ### Database migration
 

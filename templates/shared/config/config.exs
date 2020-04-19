@@ -7,17 +7,17 @@
 # General application configuration
 use Mix.Config
 
-config :vue_prefab,
-  ecto_repos: [VuePrefab.Repo]
+config :<%= app_name %>,
+  ecto_repos: [<%= app_module %>.Repo]
 
 # Configures the endpoint
-config :vue_prefab, VuePrefabWeb.Endpoint,
+config :<%= app_name %>, <%= web_module %>.Endpoint,
   url: [host: System.get_env("HOST", "localhost")],
   # Generated secret key - production uses one from env variables
-  secret_key_base: "6nB+yWk3GEsNFwGov1EcdClLJtZgym4kzSYZf/V2MpYvUMreCgsVUlPSmiH8uvvy",
-  render_errors: [view: VuePrefabWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: VuePrefab.PubSub, adapter: Phoenix.PubSub.PG2],
-  live_view: [signing_salt: "S4gn7lpo"]
+  secret_key_base: "<%= :crypto.strong_rand_bytes(64) |> Base.encode64 |> binary_part(0, 64) %>",
+  render_errors: [view: <%= web_module %>.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: <%= app_module %>.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "<%= :crypto.strong_rand_bytes(8) |> Base.encode64 |> binary_part(0, 8) %>"]
 
 # Configures Elixir's Logger
 config :logger, :console,

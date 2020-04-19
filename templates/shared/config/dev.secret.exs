@@ -3,7 +3,7 @@
 use Mix.Config
 
 # Configure your database connection
-config :vue_prefab, VuePrefab.Repo,
+config :<%= app_name %>, <%= app_module %>.Repo,
   # This URL is for using a docker-compose environment, where the Phoenix container is started
     url: System.get_env("DATABASE_URL", "postgres://phoenix:phoenix@db_dev:5432/phoenix_dev")
 

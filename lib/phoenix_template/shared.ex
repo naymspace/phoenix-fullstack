@@ -3,10 +3,10 @@ defmodule PhoenixTemplate.Shared do
   Rewrites generated Phoenix files that are important to every frontend
   """
 
-  def run(path) do
+  def run(path, template_bindings) do
     path
     |> rewrite()
-    |> copy_template_files()
+    |> copy_template_files(template_bindings)
   end
 
   def rewrite(path) do
@@ -44,7 +44,7 @@ defmodule PhoenixTemplate.Shared do
     File.write!(file, lines)
   end
 
-  defp copy_template_files(path) do
+  defp copy_template_files(path, template_bindings) do
     Mix.shell().info("Copying project files to '#{Path.relative_to_cwd(path)}' ...")
     File.cp_r("templates/shared/root", path)
 
@@ -52,8 +52,24 @@ defmodule PhoenixTemplate.Shared do
       "Copying configuration files to '#{Path.relative_to_cwd(Path.expand("config/", path))}' ..."
     )
 
-    File.cp_r("templates/shared/config", Path.expand("config/", path))
+    config_files(path, template_bindings)
+
+    Mix.shell().info("Removing unnecessary prod.secret.exs ...")
+    File.rm!(Path.expand("config/prod.secret.exs", path))
 
     path
+  end
+
+  defp config_files(path, template_bindings) do
+    config_path = Path.expand("config/", path)
+    template_path = "templates/shared/config/"
+
+    File.ls!(template_path)
+    |> Enum.map(fn file -> Path.expand(file, template_path) end)
+    |> Enum.each(fn file ->
+      content = EEx.eval_file(file, template_bindings)
+      config_file = Path.expand(Path.basename(file), config_path)
+      File.write!(config_file, content)
+    end)
   end
 end

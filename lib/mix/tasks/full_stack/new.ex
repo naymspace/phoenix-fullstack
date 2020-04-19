@@ -43,11 +43,13 @@ defmodule Mix.Tasks.FullStack.New do
     validate_frontend!(frontend)
     path = hd(args)
 
+    bindings = template_bindings(path)
+
     # Generate Phoenix project
     Mix.Task.run("phx.new", [path])
 
     # General operation
-    PhoenixTemplate.Shared.run(path)
+    PhoenixTemplate.Shared.run(path, bindings)
 
     # TODO: Add elm and react support
     case frontend do
@@ -89,5 +91,14 @@ defmodule Mix.Tasks.FullStack.New do
       unknown ->
         Mix.raise("Unknown frontend " <> unknown)
     end
+  end
+
+  defp template_bindings(path) do
+    app_name = Path.basename(path) |> String.downcase()
+    [
+      app_name: app_name,
+      app_module:  Macro.camelize(app_name),
+      web_module: "#{Macro.camelize(app_name)}Web"
+    ]
   end
 end

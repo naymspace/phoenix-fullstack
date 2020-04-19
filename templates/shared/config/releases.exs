@@ -17,7 +17,7 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
-config :vue_prefab, VuePrefabWeb.Endpoint,
+config :<%= app_name %>, <%= web_module %>.Endpoint,
   url: [host: host_url, port: 80],
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
@@ -42,7 +42,7 @@ database_url =
     """
 
 # Increase database connection pool size for production or use default
-config :vue_prefab, VuePrefab.Repo,
+config :<%= app_name %>, <%= app_module %>.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   url: database_url
 
