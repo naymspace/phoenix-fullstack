@@ -46,7 +46,7 @@ defmodule PhoenixTemplate.Shared do
       String.replace(
         lines,
         "get \"/\", PageController, :index",
-        "get \"/\"*page, PageController, :index"
+        "get \"/*page\", PageController, :index"
       )
 
     File.write!(file, lines)
