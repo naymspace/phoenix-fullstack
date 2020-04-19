@@ -5,87 +5,122 @@
 _One Paragraph of project description goes here. Describe briefly the project and its goal to give a rough understanding about it. Please mention the main programming language (PHP, Elixir, Ruby). This should also include a rough overview of the context (i.e. dependent projects and production environment)_
 
 ## Quickstart – Docker
-_If your project has docker-compose support, mention it in this paragraph._
+
+You can use Docker Compose to start the project.
 
 ### Configuration/Setup
-_Describe necessary preparations to run the application with docker-compose. This includes file renaming or executing a migration in the application container before usage_
+
+Copy the `config/example.dev.secret.exs` to `config/dev.secret.exs` and the `config/example.test.secret.exs` to 
+`config/dev.test.exs`. They contain the necessary environment variables.
+
+### Database migration
+
+Run database migrations from the `web` container with
+
+    docker-compose exec web sh
+    mix ecto.migrate
 
 ### Start
-_List the command to start the application. It is enough to only say `docker-compose up` if this is enough. Do not take it for granted that everyone has previously used docker-compose! Most setups have already a running app after docker-compose up, but there can be some environment like Java were a manual start is necessary._
+
+Start the databases and the Phoenix server with: 
+
+    docker-compose up
 
 ## Start – manual way
 
 **You can skip this part if you are using Docker.**
 
-_Describe the necessary steps to setup the app without Docker. This can be tedious but can improve the understandment about the application. The knowledge can help to fix problems with the docker setup._
+The following steps will explain the setup to start the app.
 
 ### Prerequisites
 
 _What things you need to install the software and how to install them. Add the version to the dependency instead of only the name (Python 3.6 instead of Python). Also mention possible running software like databases or cache server._
 
-- _1 @ 3.6_
-- _2 @ 0.0.1_
-- _..._
-- _n @ version_
+- [Erlang/OTP @ 22](https://www.erlang.org/)
+    - Included in most distributions package manager.
+- [Elixir @ 1.9](https://elixir-lang.org/)
+    - I incline to use asdf (https://asdf-vm.com/#/)
+- [Hex (Elixir package manager)](https://hex.pm/)
+    - `mix local.hex`
+- [Phoenix @ 1.4.12](https://hexdocs.pm/phoenix/installation.html)
+    - `mix archive.install hex phx_new 1.4.9`
+- [PostgreSQL @ 11.4](https://www.postgresql.org/)
+    - Included in most distributions package manager.
+- [NodeJs @ 10.X](https://nodejs.org/en/)
+    - Included in most distributions package manager.
 
 ### Installing
 
-_A step by step series of examples that tell you how to get a development env running. Start with a completely unconfigured environment and do not assume anything else than described in **Prerequisites**!_
+Get the elixir/mix dependencies:
 
-_Example:_
+    mix deps.get
+    
+Get the npm dependencies:
 
-```
-sh install_requirements.txt
-```
+    cd assets
+    npm i
+
+Also run necessary database migrations.
 
 ### Configuration
 
-_The same as Quickstart – Docker/Configuration. You can link the this paragraph if the steps are the same_
+Follow the steps in the section for the docker configuration.
+
+Adapt the database URLs to the database in the `dev|test.secret.exs` to your database. 
 
 ### Start
 
-_The commands to start and stop the application. Describe every command line parameter and if it is required._
+    mix phx.server
 
-_Start:_
+You can run the phoenix server in an interactive session with:
 
-```
-java -jar server.jar -p 8080
-```
-
-_Parameter:_
-
-- -p[INT] The port of the server. Required.
+    iex -S mix phx.server
 
 ## Access application
 
-_List the steps to access the application, like the default URL:_
+Open the URL in your browser:
 
-```
-http://localhost:8082
-```
+    
+    http://localhost:8080
+    
 
 ## Environment variables
 
 _List necessary environment variables and their meaning. If there is a `.env` file, give a hint._
 
-- **API_KEY** [String] - The key for the API. Only have a placeholder in the repository.
+  - DATABASE_URL [String] - Connection string to your database (postgres://user:password@host/database)
 
 ## Building and Deployment
 
-_Explain the steps (build docker for example) for deployment. If there is a CI process (like `.gitlab-ci.yml`), you can reference that. If there is none and the deployment is manually, you must describe it here._
+There are two Dockerfiles. `Dockerfile` is for development and testing. The `Dockerfile_prod`is for building a 
+production version of your app. The latter uses [Elixir releases](https://hexdocs.pm/mix/Mix.Tasks.Release.html) /
+[Phoenix releases](https://hexdocs.pm/phoenix/releases.html).
 
 ## Automatic tests
 
 _Explain how the tests can be started and if they need additional configuration based on the installation process_
 
+Run the Elixir backend tests (do not forget to set the `DATABASE_URL`):
+
+    mix test    
+
 ## Major dependencies
 
 _Mention and link the main dependencies of the project. These are frameworks, depedency manager, project management tools and bigger libraries. No need to list every little dependency._
 
-- [JQuery](https://jquery.com/) - Javascript library
-- [Maven](https://maven.apache.org/) - Dependency Management
+- [Elixir](https://hexdocs.pm/elixir/Kernel.html) - The function language for the backend.
+- [Phoenix](https://hexdocs.pm/phoenix/overview.html) - The web framework of the project.
+- [Ecto](https://hexdocs.pm/ecto/Ecto.html) - The database layer of Phoenix. 
 
-_List guides and documentation useful for this project, like the used code convention._
+_Add the documentation to your framework_
+
+### Hint 
+
+The hexdocs websites contains useful shortcuts: 
+
+  - Press `g` to switch to another dependency and its documentation. 
+  - Press `s` to switch to the search bar and start typing what you are looking for.
+  - Press `n` to toggle dark mode.
 
 ## Useful hints
 
