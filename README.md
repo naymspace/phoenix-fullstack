@@ -39,6 +39,8 @@ The supported frontends are:
 
 ### Compile and install
 
+Download this repository.
+
 Create a Mix archive:
 
 `mix archive.build`
@@ -54,10 +56,6 @@ This should output the following questions (version can vary):
 
 > Are you sure you want to install "phoenix_template-0.1.0.ez"? [Yn] y  
 > creating ~/.mix/archives/phoenix_template-0.1.0
-
-### Use GitLab Releases
-
-TODO
 
 ## Usage
 
