@@ -6,6 +6,7 @@ defmodule PhoenixTemplate.React do
   def run(path) do
     path
     |> copy_template_files()
+    |> rewrite()
   end
 
   defp copy_template_files(path) do
@@ -31,5 +32,39 @@ defmodule PhoenixTemplate.React do
       "templates/react/web/templates/page/index.html.eex",
       Path.expand("templates/page/index.html.eex", web_path)
     )
+
+    path
+  end
+
+  defp rewrite(path) do
+    config_path = Path.expand("config/", path)
+    rewrite_dev_watcher(config_path)
+    path
+  end
+
+  defp rewrite_dev_watcher(config_path) do
+    file = Path.expand("dev.exs", config_path)
+    Mix.shell().info("Rewriting dev watcher at '#{Path.relative_to_cwd(file)}' ...")
+    lines = File.read!(file)
+
+    # Replace `only` part to serve img instead of images
+    lines =
+      String.replace(
+        lines,
+        ~r/watchers: \[.*\],/s,
+        """
+        watchers: [
+            node: [
+              "node_modules/webpack/bin/webpack.js",
+              "--mode",
+              "development",
+              "--watch-stdin",
+              cd: Path.expand("../assets", __DIR__)
+          ]
+        ]
+        """
+      )
+
+    File.write!(file, lines)
   end
 end
