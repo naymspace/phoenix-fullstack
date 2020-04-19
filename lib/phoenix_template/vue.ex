@@ -52,7 +52,7 @@ defmodule PhoenixTemplate.Vue do
 
     File.cp(
       "templates/vue/web/templates/page/index.html.eex",
-      Path.expand("templates/layout/page/index.html.eex", web_path)
+      Path.expand("templates/page/index.html.eex", web_path)
     )
   end
 end

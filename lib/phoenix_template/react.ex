@@ -29,7 +29,7 @@ defmodule PhoenixTemplate.React do
 
     File.cp(
       "templates/react/web/templates/page/index.html.eex",
-      Path.expand("templates/layout/page/index.html.eex", web_path)
+      Path.expand("templates/page/index.html.eex", web_path)
     )
   end
 end
