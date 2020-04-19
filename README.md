@@ -21,7 +21,9 @@ The supported frontends are:
     + Vuex
     + Router
     + Typescript
-+ React (**NOT YET IMPLEMENTED**)
++ React
+    + Redux
+    + Typescript
 + Elm (**NOT YET IMPLEMENTED**)
 
 ## Requirements
