@@ -52,6 +52,7 @@ defmodule Mix.Tasks.FullStack.New do
     # TODO: Add elm and react support
     case frontend do
       "vue" -> PhoenixTemplate.Vue.run(path)
+      "react" -> PhoenixTemplate.React.run(path)
     end
 
     Mix.shell().info("Finished!")
@@ -80,7 +81,7 @@ defmodule Mix.Tasks.FullStack.New do
         nil
 
       "react" ->
-        Mix.raise("React as frontend not yet implemented!")
+        nil
 
       "elm" ->
         Mix.raise("Elm as frontend not yet implemented!")

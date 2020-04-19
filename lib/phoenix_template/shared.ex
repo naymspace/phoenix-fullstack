@@ -24,14 +24,6 @@ defmodule PhoenixTemplate.Shared do
     # Replace Gzip and Brotli compression
     lines = String.replace(lines, "gzip: false,", "gzip: true,\n    brotli: true,")
 
-    # Replace `only` part to serve img instead of images
-    lines =
-      String.replace(
-        lines,
-        "only: ~w(css fonts images js favicon.ico robots.txt)",
-        "only: ~w(css fonts img js favicon.ico robots.txt)"
-      )
-
     File.write!(file, lines)
   end
 
@@ -52,7 +44,7 @@ defmodule PhoenixTemplate.Shared do
     File.write!(file, lines)
   end
 
-  def copy_template_files(path) do
+  defp copy_template_files(path) do
     Mix.shell().info("Copying project files to '#{Path.relative_to_cwd(path)}' ...")
     File.cp_r("templates/shared/root", path)
 
