@@ -10,6 +10,7 @@ RUN mkdir -p /app/assets
 WORKDIR /app
 
 COPY assets/package.json assets/package-lock.json /app/assets/
+ENV NODE_ENV dev
 RUN npm install --prefix assets
 
 COPY mix.exs mix.lock /app/
