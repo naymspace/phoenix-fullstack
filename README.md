@@ -71,4 +71,5 @@ The options are:
 
     `--frontend` - Required. The frontend technology to use. One of:
       * `vue` - Vue 2 with Vuex, Router and Typescript. Compatible with the Vue-Cli
-      * `react` - **NOT YET IMPLEMENTED**
+      * `react` - React with Redux, Router and Typescript.
+      * `elm` - **NOT YET IMPLEMENTED**
