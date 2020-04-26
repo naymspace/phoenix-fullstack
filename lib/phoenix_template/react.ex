@@ -3,6 +3,8 @@ defmodule PhoenixTemplate.React do
   React specific operation
   """
 
+  import PhoenixTemplate.Templates, only: [copy_directory: 2, copy_file: 2]
+
   def run(path) do
     path
     |> copy_template_files()
@@ -16,20 +18,20 @@ defmodule PhoenixTemplate.React do
     File.rm_rf!(asset_path)
     # Copy asset directory containing all vue frontend information
     Mix.shell().info("Copying asset directory to '#{Path.relative_to_cwd(asset_path)}' ...")
-    File.cp_r("templates/react/assets/", asset_path)
+    copy_directory("react/assets/", asset_path)
 
     # Replace web templates to support the vue js application (Add `app` div, change js and css in index.html)
     Mix.shell().info("Replacing web templates ...")
     project_path = Path.expand("lib/", path)
     web_path = Path.expand("#{Macro.underscore(path)}_web/", project_path)
 
-    File.cp(
-      "templates/react/web/templates/layout/app.html.eex",
+    copy_file(
+      "react/web/templates/layout/app.html.eex",
       Path.expand("templates/layout/app.html.eex", web_path)
     )
 
-    File.cp(
-      "templates/react/web/templates/page/index.html.eex",
+    copy_file(
+      "react/web/templates/page/index.html.eex",
       Path.expand("templates/page/index.html.eex", web_path)
     )
 

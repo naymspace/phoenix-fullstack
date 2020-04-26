@@ -4,10 +4,13 @@ defmodule PhoenixTemplate.MixProject do
   def project do
     [
       app: :phoenix_template,
-      version: "1.0.0",
+      version: "1.0.1",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: [
+        files: ~w(lib templates mix.exs README.md)
+      ],
     ]
   end
 
