@@ -15,6 +15,7 @@ defmodule PhoenixTemplate.Shared do
     project_path = Path.expand("lib/", path)
     rewrite_endpoint(path, project_path)
     rewrite_router(path, project_path)
+    rewrite_mix_file(path)
     path
   end
 
@@ -46,9 +47,42 @@ defmodule PhoenixTemplate.Shared do
     File.write!(file, lines)
   end
 
+  defp rewrite_mix_file(path) do
+    file = Path.expand("mix.exs", path)
+    Mix.shell().info("Rewriting mix.exs at '#{Path.relative_to_cwd(file)}' ...")
+    lines = File.read!(file)
+
+    # Replace default
+    lines =
+      String.replace(
+        lines,
+        ~r/defp aliases do\s+\[.*\]\s+end/s,
+        """
+        defp aliases do
+            [
+              "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+              "ecto.reset": ["ecto.pg_drop", "ecto.create", "ecto.migrate"],
+              "ecto.reset-quiet": ["ecto.pg_drop", "ecto.create", "ecto.migrate"],
+              "ecto.reseed": ["ecto.pg_drop", "ecto.setup"],
+              "ecto.reseed-quiet": ["ecto.pg_drop -y", "ecto.setup"],
+              "ecto.seed": ["run priv/repo/seeds.exs"],
+              test: ["ecto.create --quiet", "ecto.pg_drop", "ecto.migrate", "test"],
+              "test-quiet": ["ecto.create --quiet", "ecto.pg_drop -y", "ecto.migrate", "test"]
+            ]
+          end
+        """
+      )
+
+    File.write!(file, lines)
+  end
+
   defp copy_template_files(path, template_bindings) do
     Mix.shell().info("Copying project files to '#{Path.relative_to_cwd(path)}' ...")
     copy_directory("shared/root/", path)
+
+    tasks_path = Path.expand("lib/mix/tasks/ecto/", path)
+    Mix.shell().info("Copying mix tasks to '#{Path.relative_to_cwd(tasks_path)}' ...")
+    copy_directory("shared/tasks/", tasks_path)
 
     Mix.shell().info(
       "Copying configuration files to '#{Path.relative_to_cwd(Path.expand("config/", path))}' ..."
@@ -65,14 +99,5 @@ defmodule PhoenixTemplate.Shared do
   defp config_files(path, template_bindings) do
     config_path = Path.expand("config/", path)
     eval_directory("shared/config/", config_path, template_bindings)
-#    template_path = "templates/shared/config/"
-#
-#    File.ls!(template_path)
-#    |> Enum.map(fn file -> Path.expand(file, template_path) end)
-#    |> Enum.each(fn file ->
-#      content = EEx.eval_file(file, template_bindings)
-#      config_file = Path.expand(Path.basename(file), config_path)
-#      File.write!(config_file, content)
-#    end)
   end
 end

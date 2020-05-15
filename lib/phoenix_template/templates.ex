@@ -50,6 +50,8 @@ defmodule PhoenixTemplate.Templates do
     "shared/root/.dockerignore",
     "shared/root/.gitignore",
     "shared/root/docker-compose.yml",
+    # Mix Tasks,
+    "shared/tasks/pq_drop.ex",
     # React Web
     "react/web/templates/page/index.html.eex",
     "react/web/templates/layout/app.html.eex",
