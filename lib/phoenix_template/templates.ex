@@ -54,6 +54,8 @@ defmodule PhoenixTemplate.Templates do
     "shared/root/.gitlab-ci.yml",
     # Mix Tasks,
     "shared/tasks/pq_drop.ex",
+    # Release
+    "shared/release/release.ex",
     # React Web
     "react/web/templates/page/index.html.eex",
     "react/web/templates/layout/app.html.eex",
@@ -101,6 +103,12 @@ defmodule PhoenixTemplate.Templates do
   def copy_file(file, target_file) do
     File.mkdir_p!(Path.dirname(target_file))
     create_file(target_file, render(file), force: true)
+  end
+
+  def eval_file(file, target_file, bindings) do
+    File.mkdir_p!(Path.dirname(target_file))
+    content = EEx.eval_string(render(file), bindings)
+    create_file(target_file, content, force: true)
   end
 
   def eval_directory(directory, target_root, bindings) do

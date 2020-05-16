@@ -3,7 +3,7 @@ defmodule PhoenixTemplate.Shared do
   Rewrites generated Phoenix files that are important to every frontend
   """
 
-  import PhoenixTemplate.Templates, only: [copy_directory: 2, eval_directory: 3]
+  import PhoenixTemplate.Templates, only: [copy_directory: 2, eval_directory: 3, eval_file: 3]
 
   def run(path, template_bindings) do
     path
@@ -92,6 +92,10 @@ defmodule PhoenixTemplate.Shared do
 
     Mix.shell().info("Removing unnecessary prod.secret.exs ...")
     File.rm!(Path.expand("config/prod.secret.exs", path))
+
+    release_path = Path.expand("lib/#{Macro.underscore(path)}/release.ex", path)
+    Mix.shell().info("Copy release.ex to '#{Path.relative_to_cwd(release_path)}' ...")
+    eval_file("shared/release/release.ex", release_path, template_bindings)
 
     path
   end
