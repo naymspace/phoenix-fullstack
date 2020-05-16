@@ -46,10 +46,12 @@ defmodule PhoenixTemplate.Templates do
     "shared/root/Dockerfile",
     "shared/root/mix.lock",
     "shared/root/Dockerfile_prod",
+    "shared/root/Dockerfile_analyze",
     "shared/root/README.md",
     "shared/root/.dockerignore",
     "shared/root/.gitignore",
     "shared/root/docker-compose.yml",
+    "shared/root/.gitlab-ci.yml",
     # Mix Tasks,
     "shared/tasks/pq_drop.ex",
     # React Web
