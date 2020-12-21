@@ -1,9 +1,0 @@
-FROM elixir:1.10.2-alpine
-WORKDIR /app
-
-RUN apk add nodejs-npm
-COPY mix.exs .
-RUN mix do local.hex, local.rebar, deps.get
-RUN mix deps.compile
-
-COPY . /app/

@@ -1,9 +1,9 @@
-defmodule PhoenixTemplate.MixProject do
+defmodule PhoenixFullStack.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :phoenix_template,
+      app: :phoenix_full_stack,
       version: "1.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
