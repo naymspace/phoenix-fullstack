@@ -28,7 +28,7 @@ defmodule Mix.Tasks.FullStack.New do
     bindings = template_bindings(path)
 
     # Generate Phoenix project
-    Mix.Task.run("phx.new", [path])
+    Mix.Task.run("phx.new", [path, "--no-webpack", "--no-install"])
 
     Mix.shell().info("Finished!")
   end
