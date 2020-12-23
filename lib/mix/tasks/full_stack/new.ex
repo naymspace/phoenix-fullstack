@@ -26,18 +26,20 @@ defmodule Mix.Tasks.FullStack.New do
     path = hd(args)
 
     bindings = template_bindings(path)
-
+    Mix.shell().info("Creating Phoenix project...")
     # Generate Phoenix project
-    Mix.Task.run("phx.new", [path, "--no-webpack", "--no-install"])
-
+    Mix.Task.run("phx.new", [path, "--no-webpack", "--no-install", "--no-html"])
+    Mix.shell().info("Adding naymspace modifications...")
+    PhoenixFullStack.Modify.modify(path)
     Mix.shell().info("Finished!")
   end
 
   defp template_bindings(path) do
     app_name = Path.basename(path) |> String.downcase()
+
     [
       app_name: app_name,
-      app_module:  Macro.camelize(app_name),
+      app_module: Macro.camelize(app_name),
       web_module: "#{Macro.camelize(app_name)}Web"
     ]
   end

@@ -3,7 +3,6 @@ defmodule Mix.Tasks.Version do
   @shortdoc "Prints the version of the main application"
 
   def run(_) do
-    Mix.Shell.IO.info(PhoenixFullStack.MixProject.project[:version])
+    Mix.Shell.IO.info(PhoenixFullStack.MixProject.project()[:version])
   end
-
 end
