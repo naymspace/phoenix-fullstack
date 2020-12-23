@@ -36,9 +36,9 @@ defmodule PhoenixFullStack.Modify.Phoenix do
     File.write!(file, lines)
   end
 
-  @template_files_path "backend/phoenix/"
+  @prefix "backend/phoenix/"
 
   defp add_files(path) do
-    copy_file(".keepdir", path)
+    copy_file(@prefix <> "mix_tasks/pg_drop.ex", path <> "/lib/mix/tasks/ecto/pg_drop.ex")
   end
 end
