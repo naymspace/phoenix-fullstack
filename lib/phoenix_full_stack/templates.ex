@@ -24,19 +24,15 @@ defmodule PhoenixFullStack.Templates do
   def copy_directory(directory, target_root) do
     @template_files
     |> Stream.filter(fn path -> String.starts_with?(path, directory) end)
-    |> Stream.map(
-         fn path ->
-           target_file = String.replace_prefix(path, directory, "")
-           {path, target_file}
-         end
-       )
-    |> Enum.each(
-         fn {path, target_file} ->
-           target_file = Path.expand(target_file, target_root)
-           File.mkdir_p!(Path.dirname(target_file))
-           create_file(target_file, render(path), force: true)
-         end
-       )
+    |> Stream.map(fn path ->
+      target_file = String.replace_prefix(path, directory, "")
+      {path, target_file}
+    end)
+    |> Enum.each(fn {path, target_file} ->
+      target_file = Path.expand(target_file, target_root)
+      File.mkdir_p!(Path.dirname(target_file))
+      create_file(target_file, render(path), force: true)
+    end)
   end
 
   def copy_file(file, target_file) do
@@ -53,19 +49,15 @@ defmodule PhoenixFullStack.Templates do
   def eval_directory(directory, target_root, bindings) do
     @template_files
     |> Stream.filter(fn path -> String.starts_with?(path, directory) end)
-    |> Stream.map(
-         fn path ->
-           target_file = String.replace_prefix(path, directory, "")
-           {path, target_file}
-         end
-       )
-    |> Enum.each(
-         fn {path, target_file} ->
-           content = EEx.eval_string(render(path), bindings)
-           target_file = Path.expand(target_file, target_root)
-           File.mkdir_p!(Path.dirname(target_file))
-           create_file(target_file, content, force: true)
-         end
-       )
+    |> Stream.map(fn path ->
+      target_file = String.replace_prefix(path, directory, "")
+      {path, target_file}
+    end)
+    |> Enum.each(fn {path, target_file} ->
+      content = EEx.eval_string(render(path), bindings)
+      target_file = Path.expand(target_file, target_root)
+      File.mkdir_p!(Path.dirname(target_file))
+      create_file(target_file, content, force: true)
+    end)
   end
 end

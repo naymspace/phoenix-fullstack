@@ -2,8 +2,14 @@ defmodule PhoenixFullStack.Modify.Phoenix do
   @moduledoc false
   import PhoenixFullStack.Templates
 
-  def modify(path) do
+  @source_prefix "backend/phoenix"
+  @target_prefix "phoenix_api"
+
+  def modify(path, template_bindings) do
+    path = Path.join(path, @target_prefix)
+
     rewrite_mix_file(path)
+    rewrite_configs(path)
     add_files(path)
   end
 
@@ -36,9 +42,30 @@ defmodule PhoenixFullStack.Modify.Phoenix do
     File.write!(file, lines)
   end
 
-  @prefix "backend/phoenix/"
+  defp rewrite_configs(path) do
+    rewrite_configs_import(path)
+  end
+
+  # Phoenix generates a config file using Mix.Config, which is deprecated and should be replaced by Config
+  defp rewrite_configs_import(path) do
+    config_path = Path.join(path, "/config")
+
+    File.ls!(config_path)
+    |> Enum.each(fn config_file ->
+      config_file = Path.join(config_path, config_file)
+
+      lines =
+        File.read!(config_file)
+        |> String.replace(
+          ~r/use Mix.Config/s,
+          "import Config"
+        )
+
+      File.write!(config_file, lines)
+    end)
+  end
 
   defp add_files(path) do
-    copy_file(@prefix <> "mix_tasks/pg_drop.ex", path <> "/lib/mix/tasks/ecto/pg_drop.ex")
+    copy_file(@source_prefix <> "/mix_tasks/pg_drop.ex", path <> "/lib/mix/tasks/ecto/pg_drop.ex")
   end
 end
