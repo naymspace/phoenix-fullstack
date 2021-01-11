@@ -33,7 +33,7 @@ defmodule Mix.Tasks.FullStack.New do
     Mix.Task.run("phx.new", [path, "--no-webpack", "--no-install", "--no-html"])
     move_phoenix_files(path)
     Mix.shell().info("Adding naymspace modifications...")
-    PhoenixFullStack.Modify.modify(path, template_bindings(path))
+    PhoenixFullStack.Modify.modify(path, bindings)
     Mix.shell().info("Finished!")
   end
 

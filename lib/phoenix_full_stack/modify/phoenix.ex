@@ -7,10 +7,9 @@ defmodule PhoenixFullStack.Modify.Phoenix do
 
   def modify(path, template_bindings) do
     path = Path.join(path, @target_prefix)
-
     rewrite_mix_file(path)
     rewrite_configs(path)
-    add_files(path)
+    add_files(path, template_bindings)
   end
 
   defp rewrite_mix_file(path) do
@@ -63,9 +62,17 @@ defmodule PhoenixFullStack.Modify.Phoenix do
 
       File.write!(config_file, lines)
     end)
+
+    # We do not need the production secret file because all are loaded via the
+    File.rm!(Path.join(config_path, "prod.secret.exs"))
   end
 
-  defp add_files(path) do
+  defp add_files(path, template_bindings) do
+    app_path = path <> "/lib/" <> template_bindings[:app_name]
     copy_file(@source_prefix <> "/mix_tasks/pg_drop.ex", path <> "/lib/mix/tasks/ecto/pg_drop.ex")
+    eval_file(@source_prefix <> "/config/releases.exs", path <> "/config/releases.exs", template_bindings)
+
+    eval_file(@source_prefix <> "/lib/app/repo.ex", app_path <> "/repo.ex", template_bindings)
+    eval_file(@source_prefix <> "/lib/app/release.ex", app_path <> "/release.ex", template_bindings)
   end
 end
