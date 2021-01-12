@@ -16,6 +16,11 @@ defmodule PhoenixFullStack.Modify.Project do
       path <> "/docker-compose.override.templ.yml"
     )
 
+    copy_file(
+      @source_prefix <> "/.gitignore",
+      path <> "/.gitignore"
+    )
+
     eval_file(
       @source_prefix <> "/docker-compose.yml.exs",
       path <> "/docker-compose.yml",
