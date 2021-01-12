@@ -151,7 +151,12 @@ defmodule PhoenixFullStack.Modify.Phoenix do
 
   defp add_files(path, template_bindings) do
     app_path = path <> "/lib/" <> template_bindings[:app_name]
-    copy_file(@source_prefix <> "/mix_tasks/pg_drop.ex", path <> "/lib/mix/tasks/ecto/pg_drop.ex")
+
+    eval_file(
+      @source_prefix <> "/mix_tasks/pg_drop.ex",
+      path <> "/lib/mix/tasks/ecto/pg_drop.ex",
+      template_bindings
+    )
 
     eval_file(
       @source_prefix <> "/config/releases.exs",

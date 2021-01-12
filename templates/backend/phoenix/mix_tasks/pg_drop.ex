@@ -37,7 +37,7 @@ defmodule Mix.Tasks.Ecto.PqDrop do
     Mix.shell().info("Retrieving all tables from database...")
 
     table_names =
-      Ted.Repo.query!(
+      <%= app_module %>.Repo.query!(
         "SELECT table_name FROM information_schema.tables WHERE table_schema = (SELECT current_schema())"
       )
       |> Map.fetch!(:rows)
@@ -49,7 +49,7 @@ defmodule Mix.Tasks.Ecto.PqDrop do
 
     table_names
     |> Enum.map(fn table_name -> "DROP TABLE IF EXISTS #{table_name} CASCADE;" end)
-    |> Enum.each(&Ted.Repo.query!/1)
+    |> Enum.each(&<%= app_module %>.Repo.query!/1)
 
     Mix.shell().info("All tables dropped!")
   end
