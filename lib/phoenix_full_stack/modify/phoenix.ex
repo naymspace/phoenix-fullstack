@@ -198,9 +198,8 @@ defmodule PhoenixFullStack.Modify.Phoenix do
   end
 
   defp clean_up(path, template_bindings) do
-    Mix.Project.in_project(String.to_atom(template_bindings[:app_name]), path, fn module ->
-      Mix.Task.run("deps.get")
-      # If we run it as a mix task as above, we will receive an error that it cannot load ecto_sql
+    File.cd!(path, fn ->
+      Mix.shell().cmd("mix deps.get")
       Mix.shell().cmd("mix format")
     end)
   end
