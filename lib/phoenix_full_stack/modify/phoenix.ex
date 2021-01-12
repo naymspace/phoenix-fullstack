@@ -7,21 +7,32 @@ defmodule PhoenixFullStack.Modify.Phoenix do
 
   def modify(path, template_bindings) do
     path = Path.join(path, @target_prefix)
-    rewrite_mix_file(path)
+    rewrite_mix_file(path, template_bindings)
     rewrite_configs(path, template_bindings)
     add_files(path, template_bindings)
+    clean_up(path, template_bindings)
   end
 
-  defp rewrite_mix_file(path) do
+  defp rewrite_mix_file(path, template_bindings) do
     file = Path.expand("mix.exs", path)
-    Mix.shell().info("Rewriting mix.exs at '#{Path.relative_to_cwd(file)}' ...")
-    lines = File.read!(file)
 
-    # Replace default
+    deps =
+      load_deps(path, template_bindings)
+      |> Enum.map_join(",\n    ", fn e -> "{:#{elem(e, 0)}, \"#{elem(e, 1)}\"}" end)
+
+    Mix.shell().info("Rewriting mix.exs at '#{Path.relative_to_cwd(file)}' ...")
+
     lines =
-      String.replace(
-        lines,
-        ~r/defp aliases do\s+\[.*\]\s+end/s,
+      file
+      |> File.read!()
+      # Increase version
+      |> String.replace(
+        ~r/elixir: "~> 1.7",/,
+        "elixir: \"~> 1.11\","
+      )
+      # Replace default aliases with "better" ones
+      |> String.replace(
+        ~r/defp aliases do\s+\[.*?\]\s+end/s,
         """
         defp aliases do
             [
@@ -37,8 +48,41 @@ defmodule PhoenixFullStack.Modify.Phoenix do
           end
         """
       )
+      # Expand the dependencies with useful libraries
+      |> String.replace(
+        ~r/defp deps do\s+(\[.*?\])\s+end/s,
+        """
+        defp deps do
+          [
+            #{deps}
+          ]
+          end
+        """
+      )
 
     File.write!(file, lines)
+  end
+
+  defp load_deps(path, template_bindings) do
+    Mix.Project.in_project(String.to_atom(template_bindings[:app_name]), path, fn module ->
+      Mix.Project.config()
+    end)
+    |> Keyword.fetch!(:deps)
+    |> Enum.concat([
+      # Convert cases automatically
+      {:accent, "~> 1.0"},
+      # Adding pagination to ecto
+      {:scrivener_ecto, "~> 2.7"},
+      # Static-Code analysis
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      # Audit for mix dependencies
+      {:mix_audit, "~> 0.1", only: [:dev, :test], runtime: false},
+      # Generate random test data
+      {:faker, "~> 0.16", only: :test},
+      # Factory-bot like tool to easily create complex data structures for tests
+      {:ex_machina, "~> 2.5", only: :test}
+    ])
+    |> List.keysort(0)
   end
 
   defp rewrite_configs(path, template_bindings) do
@@ -151,5 +195,13 @@ defmodule PhoenixFullStack.Modify.Phoenix do
       path <> "/docker/Dockerfile_prod",
       template_bindings
     )
+  end
+
+  defp clean_up(path, template_bindings) do
+    Mix.Project.in_project(String.to_atom(template_bindings[:app_name]), path, fn module ->
+      Mix.Task.run("deps.get")
+      # If we run it as a mix task as above, we will receive an error that it cannot load ecto_sql
+      Mix.shell().cmd("mix format")
+    end)
   end
 end

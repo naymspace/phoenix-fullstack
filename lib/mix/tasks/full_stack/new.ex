@@ -30,7 +30,7 @@ defmodule Mix.Tasks.FullStack.New do
     bindings = template_bindings(path)
     Mix.shell().info("Creating Phoenix project...")
     # Generate Phoenix project
-    Mix.Task.run("phx.new", [path, "--no-webpack", "--install", "--no-html"])
+    Mix.Task.run("phx.new", [path, "--no-webpack", "--no-install", "--no-html"])
     move_phoenix_files(path)
     Mix.shell().info("Adding naymspace modifications...")
     PhoenixFullStack.Modify.modify(path, bindings)

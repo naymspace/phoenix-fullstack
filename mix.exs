@@ -5,7 +5,7 @@ defmodule PhoenixFullStack.MixProject do
     [
       app: :phoenix_full_stack,
       version: "1.1.0",
-      elixir: "~> 1.9",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: [
