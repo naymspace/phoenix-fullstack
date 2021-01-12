@@ -134,5 +134,22 @@ defmodule PhoenixFullStack.Modify.Phoenix do
       @source_prefix <> "/config/template.test.secret.exs",
       path <> "/config/template.test.secret.exs"
     )
+
+    # Dockerfiles
+    copy_file(
+      @source_prefix <> "/docker/Dockerfile_analyze",
+      path <> "/docker/Dockerfile_analyze"
+    )
+
+    copy_file(
+      @source_prefix <> "/docker/Dockerfile_dev",
+      path <> "/docker/Dockerfile_dev"
+    )
+
+    eval_file(
+      @source_prefix <> "/docker/Dockerfile_prod.exs",
+      path <> "/docker/Dockerfile_prod",
+      template_bindings
+    )
   end
 end

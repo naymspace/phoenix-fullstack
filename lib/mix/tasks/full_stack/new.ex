@@ -30,10 +30,15 @@ defmodule Mix.Tasks.FullStack.New do
     bindings = template_bindings(path)
     Mix.shell().info("Creating Phoenix project...")
     # Generate Phoenix project
-    Mix.Task.run("phx.new", [path, "--no-webpack", "--no-install", "--no-html"])
+    Mix.Task.run("phx.new", [path, "--no-webpack", "--install", "--no-html"])
     move_phoenix_files(path)
     Mix.shell().info("Adding naymspace modifications...")
     PhoenixFullStack.Modify.modify(path, bindings)
+
+    Mix.shell().info(
+      "The database ports are #{bindings[:db_dev_port]} and #{bindings[:db_test_port]}"
+    )
+
     Mix.shell().info("Finished!")
   end
 
@@ -51,11 +56,14 @@ defmodule Mix.Tasks.FullStack.New do
 
   defp template_bindings(path) do
     app_name = Path.basename(path) |> String.downcase()
+    db_dev_port = Enum.random(10240..25554)
 
     [
       app_name: app_name,
       app_module: Macro.camelize(app_name),
-      web_module: "#{Macro.camelize(app_name)}Web"
+      web_module: "#{Macro.camelize(app_name)}Web",
+      db_dev_port: db_dev_port,
+      db_test_port: db_dev_port + 1
     ]
   end
 end
