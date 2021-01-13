@@ -48,6 +48,7 @@ defmodule PhoenixFullStack.Templates do
 
   def eval_directory(directory, target_root, bindings) do
     @template_files
+    |> Stream.map(fn file -> String.replace(file, @root <> "/", "") end)
     |> Stream.filter(fn path -> String.starts_with?(path, directory) end)
     |> Stream.map(fn path ->
       target_file = String.replace_prefix(path, directory, "")

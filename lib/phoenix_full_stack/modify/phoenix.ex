@@ -158,42 +158,11 @@ defmodule PhoenixFullStack.Modify.Phoenix do
       template_bindings
     )
 
-    eval_file(
-      @source_prefix <> "/config/releases.exs",
-      path <> "/config/releases.exs",
-      template_bindings
-    )
+    eval_directory(@source_prefix <> "/config/", path <> "/config/", template_bindings)
 
     eval_directory(@source_prefix <> "/lib/app/", app_path <> "/", template_bindings)
 
-    eval_file(@source_prefix <> "/config/prod.exs", path <> "/config/prod.exs", template_bindings)
-
-    copy_file(
-      @source_prefix <> "/config/template.dev.secret.exs",
-      path <> "/config/template.dev.secret.exs"
-    )
-
-    copy_file(
-      @source_prefix <> "/config/template.test.secret.exs",
-      path <> "/config/template.test.secret.exs"
-    )
-
-    # Dockerfiles
-    copy_file(
-      @source_prefix <> "/docker/Dockerfile_analyze",
-      path <> "/docker/Dockerfile_analyze"
-    )
-
-    copy_file(
-      @source_prefix <> "/docker/Dockerfile_dev",
-      path <> "/docker/Dockerfile_dev"
-    )
-
-    eval_file(
-      @source_prefix <> "/docker/Dockerfile_prod.exs",
-      path <> "/docker/Dockerfile_prod",
-      template_bindings
-    )
+    eval_directory(@source_prefix <> "/docker/", path <> "/docker/", template_bindings)
   end
 
   defp clean_up(path, template_bindings) do

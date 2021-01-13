@@ -1,4 +1,4 @@
-defmodule <%= app_module %>.Util
+defmodule <%= app_module %>.Util do
   @doc """
   Fetches an environment variable set at runtime. If the value has the form {:system, "ENV_KEY"}, the function
   will read the value from the System environment.
