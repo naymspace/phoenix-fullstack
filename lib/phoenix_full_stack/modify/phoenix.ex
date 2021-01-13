@@ -164,13 +164,7 @@ defmodule PhoenixFullStack.Modify.Phoenix do
       template_bindings
     )
 
-    eval_file(@source_prefix <> "/lib/app/repo.ex", app_path <> "/repo.ex", template_bindings)
-
-    eval_file(
-      @source_prefix <> "/lib/app/release.ex",
-      app_path <> "/release.ex",
-      template_bindings
-    )
+    eval_directory(@source_prefix <> "/lib/app/", app_path <> "/", template_bindings)
 
     eval_file(@source_prefix <> "/config/prod.exs", path <> "/config/prod.exs", template_bindings)
 
