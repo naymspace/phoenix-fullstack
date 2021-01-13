@@ -9,8 +9,9 @@ defmodule PhoenixFullStack.Modify.Phoenix do
     path = Path.join(path, @target_prefix)
     rewrite_mix_file(path, template_bindings)
     rewrite_configs(path, template_bindings)
+    rewrite_test_setup(path, template_bindings)
     add_files(path, template_bindings)
-    clean_up(path, template_bindings)
+    clean_up(path)
   end
 
   defp rewrite_mix_file(path, template_bindings) do
@@ -59,12 +60,17 @@ defmodule PhoenixFullStack.Modify.Phoenix do
           end
         """
       )
+      # Add factory to test loading
+      |> String.replace(
+        "defp elixirc_paths(:test), do: [\"lib\", \"test/support\"]",
+        "defp elixirc_paths(:test), do: [\"lib\", \"test/support\", \"test/factory\"]"
+      )
 
     File.write!(file, lines)
   end
 
   defp load_deps(path, template_bindings) do
-    Mix.Project.in_project(String.to_atom(template_bindings[:app_name]), path, fn module ->
+    Mix.Project.in_project(String.to_atom(template_bindings[:app_name]), path, fn _ ->
       Mix.Project.config()
     end)
     |> Keyword.fetch!(:deps)
@@ -149,9 +155,25 @@ defmodule PhoenixFullStack.Modify.Phoenix do
     File.rm!(Path.join(config_path, "prod.secret.exs"))
   end
 
-  defp add_files(path, template_bindings) do
-    app_path = path <> "/lib/" <> template_bindings[:app_name]
+  defp rewrite_test_setup(path, template_bindings) do
+    [{"conn_case.ex", "ConnTest"}, {"channel_case.ex", "ChannelTest"}]
+    |> Enum.each(fn {file, anchor} ->
+      # Conn case
+      lines =
+        File.read!(path <> "/test/support/" <> file)
+        |> String.replace(
+          "import Phoenix.#{anchor}",
+          """
+          import Phoenix.#{anchor}
+          import #{template_bindings[:app_module]}.Factory
+          """
+        )
 
+      File.write!(path <> "/test/support/" <> file, lines)
+    end)
+  end
+
+  defp add_files(path, template_bindings) do
     eval_file(
       @source_prefix <> "/mix_tasks/pg_drop.ex",
       path <> "/lib/mix/tasks/ecto/pg_drop.ex",
@@ -160,12 +182,19 @@ defmodule PhoenixFullStack.Modify.Phoenix do
 
     eval_directory(@source_prefix <> "/config/", path <> "/config/", template_bindings)
 
-    eval_directory(@source_prefix <> "/lib/app/", app_path <> "/", template_bindings)
+    eval_directory(
+      @source_prefix <> "/lib/app/",
+      path <> "/lib/" <> template_bindings[:app_name],
+      template_bindings
+    )
 
     eval_directory(@source_prefix <> "/docker/", path <> "/docker/", template_bindings)
+
+    # Test files
+    eval_directory(@source_prefix <> "/test/", path <> "/test/", template_bindings)
   end
 
-  defp clean_up(path, template_bindings) do
+  defp clean_up(path) do
     File.cd!(path, fn ->
       Mix.shell().cmd("mix deps.get")
       Mix.shell().cmd("mix format")
