@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Ecto.PqDrop do
+defmodule Mix.Tasks.Ecto.PgDrop do
   use Mix.Task
   @shortdoc "Drops all tables in a Postgres database"
 
