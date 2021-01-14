@@ -11,20 +11,6 @@ defmodule PhoenixFullStack.Modify.Project do
   end
 
   defp add_files(path, template_bindings) do
-    copy_file(
-      @source_prefix <> "/docker-compose.override.templ.yml",
-      path <> "/docker-compose.override.templ.yml"
-    )
-
-    copy_file(
-      @source_prefix <> "/.gitignore",
-      path <> "/.gitignore"
-    )
-
-    eval_file(
-      @source_prefix <> "/docker-compose.yml.exs",
-      path <> "/docker-compose.yml",
-      template_bindings
-    )
+    eval_directory(@source_prefix <> "/.", path <> "/.", template_bindings)
   end
 end

@@ -6,4 +6,4 @@ end
 # Add other environment variables for local testing
 put_env_if_absent.("HOST", "localhost")
 put_env_if_absent.("PORT", "4000")
-put_env_if_absent.("DATABASE_URL", "postgres://app:app@localhost:5433/app_test")
+put_env_if_absent.("DATABASE_URL", "postgres://app:app@localhost:<%= db_test_port %>/app_test")
