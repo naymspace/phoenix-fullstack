@@ -23,13 +23,14 @@ defmodule PhoenixFullStack.Templates do
 
   def copy_directory(directory, target_root) do
     @template_files
+    |> Stream.map(fn file -> String.replace(file, @root <> "/", "") end)
     |> Stream.filter(fn path -> String.starts_with?(path, directory) end)
     |> Stream.map(fn path ->
       target_file = String.replace_prefix(path, directory, "")
       {path, target_file}
     end)
     |> Enum.each(fn {path, target_file} ->
-      target_file = Path.expand(target_file, target_root)
+      target_file = Path.join(target_root, target_file)
       File.mkdir_p!(Path.dirname(target_file))
       create_file(target_file, render(path), force: true)
     end)
@@ -56,7 +57,7 @@ defmodule PhoenixFullStack.Templates do
     end)
     |> Enum.each(fn {path, target_file} ->
       content = EEx.eval_string(render(path), bindings)
-      target_file = Path.expand(target_file, target_root)
+      target_file = Path.join(target_root, target_file)
       File.mkdir_p!(Path.dirname(target_file))
       create_file(target_file, content, force: true)
     end)

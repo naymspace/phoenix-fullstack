@@ -8,6 +8,8 @@ defmodule PhoenixFullStack.Modify.Phoenix do
   def modify(path, template_bindings) do
     path = Path.join(path, @target_prefix)
     rewrite_mix_file(path, template_bindings)
+    rewrite_endpoint(path, template_bindings)
+    rewrite_router(path, template_bindings)
     rewrite_configs(path, template_bindings)
     rewrite_test_setup(path, template_bindings)
     add_files(path, template_bindings)
@@ -89,6 +91,56 @@ defmodule PhoenixFullStack.Modify.Phoenix do
       {:ex_machina, "~> 2.5", only: :test}
     ])
     |> List.keysort(0)
+  end
+
+  defp rewrite_endpoint(path, template_bindings) do
+    file = Path.join(path, "/lib/#{template_bindings[:app_name]}_web/endpoint.ex")
+    #  plug Accent.Plug.Request
+    #
+    #  plug Plug.MethodOverride
+    lines =
+      file
+      |> File.read!()
+      # Add accent to pipe
+      |> String.replace(
+        "plug Plug.MethodOverride",
+        """
+         plug Accent.Plug.Request
+
+         plug Plug.MethodOverride
+        """
+      )
+
+    File.write!(file, lines)
+  end
+
+  defp rewrite_router(path, template_bindings) do
+    file = Path.join(path, "/lib/#{template_bindings[:app_name]}_web/router.ex")
+
+    lines =
+      file
+      |> File.read!()
+      # Add accent to pipe
+      |> String.replace(
+        """
+          pipeline :api do
+            plug :accepts, ["json"]
+          end
+        """,
+        """
+          pipeline :api do
+            plug :accepts, ["json"]
+
+            plug Accent.Plug.Request
+
+            plug Accent.Plug.Response,
+            default_case: Accent.Case.Camel,
+            json_codec: Jason
+        end
+        """
+      )
+
+    File.write!(file, lines)
   end
 
   defp rewrite_configs(path, template_bindings) do
