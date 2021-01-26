@@ -1,0 +1,26 @@
+#
+# Compile static web files
+#
+FROM node:14-alpine as build
+WORKDIR /app
+
+# Bash is nice to enter the container
+RUN apk update && apk upgrade && \
+  apk add bash
+
+COPY package*.json ./
+RUN npm i
+
+COPY . .
+
+ENV PUBLIC_URL="https://appaufsland.de"
+ENV PAYPAL_MODE="live"
+
+RUN npm run build
+#
+# Serve the compiled static web files
+#
+FROM nginx
+
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY docker/nginx.default.conf /etc/nginx/conf.d/default.conf

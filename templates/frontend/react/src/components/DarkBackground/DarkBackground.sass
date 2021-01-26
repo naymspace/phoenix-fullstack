@@ -1,0 +1,21 @@
+
+@import "../../sass/variables"
+.menu-background
+  position: absolute
+  width: 100%
+  height: calc(100% - #{$header-height})
+  opacity: 0
+  left: 0
+  top: $header-height
+  &.menu-dark
+    background-color: black
+    transition: opacity 0.5s ease-in-out
+    z-index: 1
+    pointer-events: none
+    &.is-visible
+      opacity: 0.5
+  &.menu-click
+    z-index: -1
+
+    &.is-clickable
+      z-index: 1
