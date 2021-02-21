@@ -233,6 +233,9 @@ defmodule PhoenixFullStack.Modify.Phoenix do
     )
 
     eval_directory(@source_prefix <> "/config/", path <> "/config/", template_bindings)
+    # Copy the templates to actual files so it will be used by the new project
+    File.cp!(path <> "/config/template.dev.secret.exs", path <> "/config/dev.secret.exs")
+    File.cp!(path <> "/config/template.test.secret.exs", path <> "/config/test.secret.exs")
 
     eval_directory(
       @source_prefix <> "/lib/app/",

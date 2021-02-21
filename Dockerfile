@@ -4,7 +4,7 @@ WORKDIR /app
 # We need GIT to resolve mix dependencies
 # Bash is nice to enter the container
 RUN apk update && apk upgrade && \
-  apk add git bash
+  apk add git bash nano
 
 RUN mix local.hex --force && \
   mix archive.install --force hex phx_new 1.5.7

@@ -21,9 +21,6 @@ erl_crash.dump
 # Also ignore archive artifacts (built via "mix archive.build").
 *.ez
 
-# Ignore package tarball (built via "mix hex.build").
-app_aufs_land-*.tar
-
 # If NPM crashes, it generates a log, let's ignore it too.
 npm-debug.log
 
@@ -177,6 +174,7 @@ fabric.properties
 /deps
 /doc
 *.beam
+!*template.*.secret.exs
 *.secret.exs
 .elixir_ls/
 
@@ -212,15 +210,6 @@ GitHub.sublime-settings
 
 ### VisualStudioCode template
 .vscode/*
-
-### Elph files
-/phoenix_api/uploads/assets/*
-!/phoenix_api/uploads/assets/.gitkeep
-/phoenix_api/uploads/elph/*
-!/phoenix_api/uploads/elph/.gitkeep
-/phoenix_api/asset_service/*
-!/phoenix_api/asset_service/.gitkeep
-
 docker-compose.override.yml
 
 # IntelliJIdea
