@@ -41,7 +41,7 @@ defmodule PhoenixFullStack.Modify.Phoenix do
             [
               "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
               "ecto.reset": ["ecto.pg_drop", "ecto.create", "ecto.migrate"],
-              "ecto.reset-quiet": ["ecto.pg_drop", "ecto.create", "ecto.migrate"],
+              "ecto.reset-quiet": ["ecto.pg_drop -y", "ecto.create", "ecto.migrate"],
               "ecto.reseed": ["ecto.pg_drop", "ecto.setup"],
               "ecto.reseed-quiet": ["ecto.pg_drop -y", "ecto.setup"],
               "ecto.seed": ["run priv/repo/seeds.exs"],
