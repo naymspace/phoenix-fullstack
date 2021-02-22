@@ -1,0 +1,14 @@
+FROM node:14-alpine
+WORKDIR /app
+
+# Bash is nice to enter the container
+RUN apk update && apk upgrade && \
+  apk add bash
+
+COPY package*.json ./
+RUN npm i
+
+COPY . .
+
+EXPOSE 4001
+CMD npm run start:dev
