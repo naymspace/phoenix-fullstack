@@ -10,8 +10,5 @@ RUN npm i
 
 COPY . .
 
-ARG PAYPAL_MODE=sandbox
-ENV PAYPAL_MODE=$PAYPAL_MODE
-
 EXPOSE 4001
 CMD npm run start:dev

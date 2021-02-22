@@ -13,9 +13,6 @@ RUN npm i
 
 COPY . .
 
-ENV PUBLIC_URL="https://appaufsland.de"
-ENV PAYPAL_MODE="live"
-
 RUN npm run build
 #
 # Serve the compiled static web files
