@@ -51,6 +51,7 @@ defmodule Mix.Tasks.FullStack.New do
     target_dir = Path.join(path, "phoenix_api")
     File.mkdir_p!(target_dir)
     File.cp_r!(tmp_dir, target_dir)
+    File.rm_rf!(tmp_dir)
     target_dir
   end
 

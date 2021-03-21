@@ -1,6 +1,7 @@
 defmodule PhoenixFullStack.Modify.Phoenix do
   @moduledoc false
   import PhoenixFullStack.Templates
+  alias PhoenixFullStack.Util
 
   @source_prefix "backend/phoenix"
   @target_prefix "phoenix_api"
@@ -95,9 +96,6 @@ defmodule PhoenixFullStack.Modify.Phoenix do
 
   defp rewrite_endpoint(path, template_bindings) do
     file = Path.join(path, "/lib/#{template_bindings[:app_name]}_web/endpoint.ex")
-    #  plug Accent.Plug.Request
-    #
-    #  plug Plug.MethodOverride
     lines =
       file
       |> File.read!()
@@ -178,7 +176,7 @@ defmodule PhoenixFullStack.Modify.Phoenix do
            http: [port: 4000, compress: true],
            render_errors: [view: #{template_bindings[:web_module]}.ErrorView, accepts: ~w(html json)],
            pubsub_server: #{template_bindings[:app_module]}.PubSub,
-           live_view: [signing_salt: "IsQj0r6P"]
+           live_view: [signing_salt: #{Util.random_string(8)}]
 
         # Configures Elixir's Logger
         """
