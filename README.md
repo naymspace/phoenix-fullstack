@@ -1,6 +1,6 @@
 # PhoenixTemplate
 
-A Mix task to create full stack web apps based on Phoenix. 
+A simple tool to generate a project with a backend, a frontend and a database.
 
 ## Content
 

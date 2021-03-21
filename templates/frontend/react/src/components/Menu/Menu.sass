@@ -1,0 +1,23 @@
+
+@import "../../sass/variables.sass"
+
+$menu-width: 25em
+
+.menu-wrapper
+  width: $menu-width
+  transition: transform 0.5s ease-in-out
+  position: absolute
+  right: 0
+  top: $header-height
+  z-index: 2
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.5)
+  z-index: 5
+  background-color: white
+  transform: translate($menu-width, 0)
+  &.is-open
+    overflow: visible
+    transform: translate(0.01em, 0)
+    @include breakpoint-small
+      width: 20em
+  .menu
+    padding: 1em

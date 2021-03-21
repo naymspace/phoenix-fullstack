@@ -1,23 +1,23 @@
-defmodule PhoenixTemplate.MixProject do
+defmodule PhoenixFullStack.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :phoenix_template,
+      app: :phoenix_full_stack,
       version: "1.1.0",
-      elixir: "~> 1.9",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: [
         files: ~w(lib templates mix.exs README.md)
-      ],
+      ]
     ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :eex, :crypto]
     ]
   end
 

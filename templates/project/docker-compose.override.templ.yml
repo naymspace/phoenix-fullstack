@@ -1,0 +1,6 @@
+version: '3.8'
+services:
+  api:
+    environment:
+      OVERRIDE_ME: THIS COULD YOUR OVERRIDE
+      DATABASE_URL: "postgres://app:app@postgres:<%= db_dev_port %>/app_development")

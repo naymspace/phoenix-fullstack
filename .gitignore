@@ -25,3 +25,6 @@ phoenix_template-*.tar
 # IntelliJ IDEA
 .idea
 *.iml
+
+# Node Modules
+node_modules/

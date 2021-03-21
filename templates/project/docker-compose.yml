@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # This docker-compose utilized a Traefik:v2 as a reverse proxy for the internal apps.
+  proxy:
+    image: traefik:v2.3
+    container_name: "traefik"
+    command:
+      - "--log.level=INFO"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - 80:80
+    # Give Traefik access to your docker
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  api:
+    build:
+      context: phoenix_api
+      dockerfile: docker/Dockerfile_dev
+    volumes:
+      - "./phoenix_api/:/app"
+      # Mount these directories to guarantee that they are empty and do not have any OS specific binaries
+      # This step is only necessary for docker-compose because they are ignored in the Dockerfile.
+      - "/app/deps"
+      - "/app/_build"
+    command: sh -c "mix phx.server; tail -f /dev/null"
+    environment:
+      DATABASE_URL: postgres://app:app@postgres:5432/app_development
+      TEST_DATABASE_URL: postgres://app:app@postgres_test:5433/app_test
+      HOST: "localhost"
+      PORT: 80
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgres
+      - postgres_test
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.api.priority=10"
+      - "traefik.http.routers.api.entrypoints=web"
+  postgres:
+    image: postgres:12-alpine
+    ports:
+      - <%= db_dev_port %>:5432
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_DB: app_development
+      POSTGRES_PASSWORD: app
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  postgres_test:
+    image: postgres:12-alpine
+    ports:
+      - <%= db_test_port %>:5432
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_DB: app_test
+      POSTGRES_PASSWORD: app
+volumes:
+  postgres-data:

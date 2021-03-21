@@ -1,0 +1,20 @@
+
+$header-height: 4.5em
+
+$breakpoint-small: 576px
+$breakpoint-medium: 768px
+$breakpoint-large: 992px
+$breakpoint-extra-large: 1200px
+
+@mixin breakpoint-small
+  @media (max-width: #{$breakpoint-small})
+    @content
+@mixin breakpoint-medium
+  @media (max-width: #{$breakpoint-medium})
+    @content
+@mixin breakpoint-large
+  @media (max-width: #{$breakpoint-large})
+    @content
+@mixin breakpoint-extra-large
+  @media (max-width: #{$breakpoint-extra-large})
+    @content
