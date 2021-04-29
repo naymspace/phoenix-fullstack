@@ -30,12 +30,12 @@ The supported frontends are:
 
 - [Erlang/OTP @ 22](https://www.erlang.org/)
     - Included in most distributions package manager.
-- [Elixir @ 1.9](https://elixir-lang.org/)
+- [Elixir @ 1.11](https://elixir-lang.org/)
     - I incline to use asdf (https://asdf-vm.com/#/)
 - [Hex (Elixir package manager)](https://hex.pm/)
     - `mix local.hex`
-- [Phoenix @ 1.4.12](https://hexdocs.pm/phoenix/installation.html)
-    - `mix archive.install hex phx_new 1.4.12`
+- [Phoenix @ v1.5.8](https://hexdocs.pm/phoenix/installation.html)
+    - `mix archive.install hex phx_new 1.5.8`
 
 ## Installation
 
