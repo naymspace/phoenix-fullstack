@@ -42,6 +42,15 @@ services:
       - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.api.priority=10"
       - "traefik.http.routers.api.entrypoints=web"
+  webclient:
+    build:
+      context: webclient
+      dockerfile: docker/Dockerfile_dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webclient.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.webclient.priority=5"
+      - "traefik.http.routers.webclient.entrypoints=web"
   postgres:
     image: postgres:12-alpine
     ports:
