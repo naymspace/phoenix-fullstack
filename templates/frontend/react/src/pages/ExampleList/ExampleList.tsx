@@ -16,7 +16,7 @@ const ExampleList = () => {
   if (isLoading) {
     return <div>Lade...</div>;
   } else if (hasError) {
-    return <div>Fehler beim Laden!</div>;
+    return <div>Error loading resources!</div>;
   } else {
     return (
       <div className="example-list">

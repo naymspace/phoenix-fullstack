@@ -21,11 +21,11 @@ const ExampleDetail = () => {
   }, [dispatch, param]);
 
   if (data.isLoading) {
-    return <div>Laden...</div>;
+    return <div>Loading...</div>;
   } else if (!data.hasError && data.data) {
     return <div>{JSON.stringify(data.data)}</div>;
   } else {
-    return <div className="error">Fehler!</div>;
+    return <div className="error">Error!</div>;
   }
 };
 
