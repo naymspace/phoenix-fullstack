@@ -24,9 +24,7 @@ defmodule Mix.Tasks.FullStack.New do
     Mix.shell().info("PhoenixFullStack v#{@version}")
   end
 
-  def run(args) do
-    path = hd(args)
-
+  def run([path, "--frontend="<>frontendType]) when frontendType in ["react"] do
     bindings = template_bindings(path)
     Mix.shell().info("Creating Phoenix project...")
     # Generate Phoenix project
@@ -35,11 +33,18 @@ defmodule Mix.Tasks.FullStack.New do
     Mix.shell().info("Adding naymspace modifications...")
     PhoenixFullStack.Modify.modify(path, bindings)
 
+    # Generate Frontend project
+    PhoenixFullStack.Templates.copy_directory("frontend/react", path <> "/webclient")
+
     Mix.shell().info(
       "The database ports are #{bindings[:db_dev_port]} and #{bindings[:db_test_port]}"
     )
 
     Mix.shell().info("Finished!")
+  end
+
+  def run() do
+    Mix.shell().info("Sorry, no valid options found. Please check the Readme.")
   end
 
   defp move_phoenix_files(path) do
