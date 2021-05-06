@@ -64,7 +64,7 @@ This should output the following questions (version can vary):
 Create a new project (will invoke the Phoenix creation at first):
 
     mix full_stack.new PATH [OPTIONS]
-      
+
 The **path** must be Phoenix compatible. 
 
 The options are:
@@ -73,3 +73,7 @@ The options are:
       * `vue` - Vue 2 with Vuex, Router and Typescript. Compatible with the Vue-Cli
       * `react` - React with Redux, Router and Typescript.
       * `elm` - **NOT YET IMPLEMENTED**
+
+For example, you could start a react project with:
+
+    mix full_stack.new awesomeProject --frontend=react
