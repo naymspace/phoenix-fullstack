@@ -24,7 +24,7 @@ defmodule Mix.Tasks.FullStack.New do
     Mix.shell().info("PhoenixFullStack v#{@version}")
   end
 
-  def run([path, "--frontend="<>frontendType]) when frontendType in ["react"] do
+  def run([path, "--frontend="<>frontend_type]) when frontend_type in ["react"] do
     bindings = template_bindings(path)
     Mix.shell().info("Creating Phoenix project...")
     # Generate Phoenix project
@@ -43,7 +43,7 @@ defmodule Mix.Tasks.FullStack.New do
     Mix.shell().info("Finished!")
   end
 
-  def run() do
+  def run(_) do
     Mix.shell().info("Sorry, no valid options found. Please check the Readme.")
   end
 
