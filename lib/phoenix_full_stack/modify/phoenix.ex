@@ -29,11 +29,6 @@ defmodule PhoenixFullStack.Modify.Phoenix do
     lines =
       file
       |> File.read!()
-      # Increase version
-      |> String.replace(
-        ~r/elixir: "~> 1.7",/,
-        "elixir: \"~> 1.11\","
-      )
       # Replace default aliases with "better" ones
       |> String.replace(
         ~r/defp aliases do\s+\[.*?\]\s+end/s,
