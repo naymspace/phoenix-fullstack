@@ -5,7 +5,8 @@ A simple tool to generate a project with a backend, a frontend and a database.
 ## Content
 
 The Mix task will create a Phoenix project and adapt the configuration to our needs. It will also install
-a frontend.
+a frontend. This project contains all the Code needed to build a working .ez archive which can then  
+be used to create a phoenix scaffolding with working frontend.
 
 The content in detail is the following:
 
@@ -17,14 +18,11 @@ The content in detail is the following:
 
 The supported frontends are:
 
-+ Vue 2 with
-    + Vuex
-    + Router
-    + Typescript
 + React
     + Redux
     + Typescript
 + Elm (**NOT YET IMPLEMENTED**)
++ Vue 2 (**NOT YET IMPLEMENTED**)
 
 ## Requirements
 
@@ -70,10 +68,12 @@ The **path** must be Phoenix compatible.
 The options are:
 
     `--frontend` - Required. The frontend technology to use. One of:
-      * `vue` - Vue 2 with Vuex, Router and Typescript. Compatible with the Vue-Cli
       * `react` - React with Redux, Router and Typescript.
       * `elm` - **NOT YET IMPLEMENTED**
+      * `vue` - **NOT YET IMPLEMENTED**
 
 For example, you could start a react project with:
 
     mix full_stack.new awesomeProject --frontend=react
+
+Then go to the project folder and start it using the docker-compose.
